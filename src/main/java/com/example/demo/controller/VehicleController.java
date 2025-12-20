@@ -2,42 +2,41 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Vehicle;
 import com.example.demo.service.VehicleService;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/vehicles")
+@RequestMapping("/vehicles")
 public class VehicleController {
 
-    private final VehicleService service;
-
-    public VehicleController(VehicleService service) {
-        this.service = service;
-    }
+    @Autowired
+    private VehicleService vehicleService;
 
     @PostMapping
-    public Vehicle create(@RequestBody Vehicle vehicle) {
-        return service.createVehicle(vehicle);
+    public Vehicle createVehicle(@RequestBody Vehicle vehicle) {
+        return vehicleService.createVehicle(vehicle);
     }
 
     @GetMapping("/{id}")
-    public Vehicle getById(@PathVariable Long id) {
-        return service.getVehicleById(id);
-    }
-
-    @GetMapping("/vin/{vin}")
-    public Vehicle getByVin(@PathVariable String vin) {
-        return service.getVehicleByVin(vin);
+    public Vehicle getVehicleById(@PathVariable Long id) {
+        return vehicleService.getVehicleById(id);
     }
 
     @GetMapping("/owner/{ownerId}")
-    public List<Vehicle> getByOwner(@PathVariable Long ownerId) {
-        return service.getVehiclesByOwner(ownerId);
+    public List<Vehicle> getVehiclesByOwner(@PathVariable Long ownerId) {
+        return vehicleService.getVehiclesByOwner(ownerId);
     }
 
-    @PutMapping("/{id}/deactivate")
-    public void deactivate(@PathVariable Long id) {
-        service.deactivateVehicle(id);
+    @DeleteMapping("/{id}")
+    public void deactivateVehicle(@PathVariable Long id) {
+        vehicleService.deactivateVehicle(id);
+    }
+
+    @GetMapping("/vin/{vin}")
+    public Vehicle getVehicleByVin(@PathVariable String vin) {
+        return vehicleService.getVehicleByVin(vin);
     }
 }
