@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.model.ServiceEntry;
 import com.example.demo.service.ServiceEntryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,11 +10,14 @@ import java.util.List;
 @RequestMapping("/service-entries")
 public class ServiceEntryController {
 
-    @Autowired
-    private ServiceEntryService serviceEntryService;
+    private final ServiceEntryService serviceEntryService;
+
+    public ServiceEntryController(ServiceEntryService serviceEntryService) {
+        this.serviceEntryService = serviceEntryService;
+    }
 
     @PostMapping
-    public ServiceEntry createServiceEntry(@RequestBody ServiceEntry entry) {
+    public ServiceEntry createEntry(@RequestBody ServiceEntry entry) {
         return serviceEntryService.createServiceEntry(entry);
     }
 

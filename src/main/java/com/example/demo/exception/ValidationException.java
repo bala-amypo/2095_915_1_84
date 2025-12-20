@@ -1,16 +1,16 @@
-package com.example.demo.exception;
+// package com.example.demo.exception;
 
-public class ValidationException extends RuntimeException {
+// public class ValidationException extends RuntimeException {
 
-    public ValidationException() {
-        super();
-    }
+//     public ValidationException() {
+//         super();
+//     }
 
-    public ValidationException(String message) {
-        super(message);
-    }
+//     public ValidationException(String message) {
+//         super(message);
+//     }
 
-    public ValidationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-}
+//     public ValidationException(String message, Throwable cause) {
+//         super(message, cause);
+//     }
+// }
