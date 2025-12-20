@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Vehicle {
@@ -13,23 +15,65 @@ public class Vehicle {
     private String make;
     private String model;
     private Long ownerId;
-    private Boolean active = true;
+    private boolean active = true;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @ManyToMany(mappedBy = "vehicles")
+    private Set<VehicleTag> tags = new HashSet<>();
 
-    public String getVin() { return vin; }
-    public void setVin(String vin) { this.vin = vin; }
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
 
-    public String getMake() { return make; }
-    public void setMake(String make) { this.make = make; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getModel() { return model; }
-    public void setModel(String model) { this.model = model; }
+    public String getVin() {
+        return vin;
+    }
 
-    public Long getOwnerId() { return ownerId; }
-    public void setOwnerId(Long ownerId) { this.ownerId = ownerId; }
+    public void setVin(String vin) {
+        this.vin = vin;
+    }
 
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public String getMake() {
+        return make;
+    }
+
+    public void setMake(String make) {
+        this.make = make;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Set<VehicleTag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<VehicleTag> tags) {
+        this.tags = tags;
+    }
 }
