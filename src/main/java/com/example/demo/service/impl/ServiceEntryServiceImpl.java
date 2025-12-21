@@ -7,6 +7,8 @@ import com.example.demo.service.ServiceEntryService;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ServiceEntryServiceImpl implements ServiceEntryService {
 
@@ -17,7 +19,7 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
     }
 
     @Override
-    public ServiceEntry save(ServiceEntry entry) {
+    public ServiceEntry createServiceEntry(ServiceEntry entry) {
 
         Vehicle v = entry.getVehicle();
 
@@ -37,5 +39,10 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
         }
 
         return repository.save(entry);
+    }
+
+    @Override
+    public List<ServiceEntry> getEntriesForVehicle(Long vehicleId) {
+        return repository.findByVehicleId(vehicleId);
     }
 }
