@@ -1,7 +1,28 @@
-package com.example.demo.model;
+// package com.example.demo.model;
+
+// import jakarta.persistence.*;
+// import java.time.LocalDate;
+
+// @Entity
+// @Table(name = "service_entries")
+// public class ServiceEntry {
+
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     private Long id;
+
+//     @ManyToOne
+//     private Vehicle vehicle;
+
+//     @ManyToOne
+//     private Garage garage;
+
+//     private String serviceType;
+//     private LocalDate serviceDate;
+//     private Integer odometerReading;
+package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "service_entries")
@@ -11,15 +32,15 @@ public class ServiceEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Vehicle vehicle;
+    private Integer odometer;   // ✅ REAL FIELD
 
     @ManyToOne
+    @JoinColumn(name = "garage_id")
     private Garage garage;
 
-    private String serviceType;
-    private LocalDate serviceDate;
-    private Integer odometerReading;
+    // getters & setters
+
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
