@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.model.ServicePart;
 import com.example.demo.repository.ServicePartRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +13,7 @@ public class ServicePartServiceImpl {
         this.servicePartRepository = servicePartRepository;
     }
 
-    // example method
-    public void test() {
-        servicePartRepository.findAll();
+    public ServicePart createPart(ServicePart part) {
+        return servicePartRepository.save(part);
     }
 }
