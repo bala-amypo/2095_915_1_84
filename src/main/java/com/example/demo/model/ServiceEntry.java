@@ -38,7 +38,7 @@ public class ServiceEntry {
     @JoinColumn(name = "garage_id")
     private Garage garage;
 
-    // getters & setters
+   
 
 
 
