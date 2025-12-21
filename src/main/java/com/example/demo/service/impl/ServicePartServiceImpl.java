@@ -2,10 +2,13 @@ package com.example.demo.service.impl;
 
 import com.example.demo.model.ServicePart;
 import com.example.demo.repository.ServicePartRepository;
+import com.example.demo.service.ServicePartService;
 import org.springframework.stereotype.Service;
 
-@Service
-public class ServicePartServiceImpl {
+import java.util.List;
+
+@Service   // 🔴 THIS ANNOTATION IS CRITICAL
+public class ServicePartServiceImpl implements ServicePartService {
 
     private final ServicePartRepository servicePartRepository;
 
@@ -13,7 +16,13 @@ public class ServicePartServiceImpl {
         this.servicePartRepository = servicePartRepository;
     }
 
-    public ServicePart createPart(ServicePart part) {
+    @Override
+    public ServicePart createServicePart(ServicePart part) {
         return servicePartRepository.save(part);
+    }
+
+    @Override
+    public List<ServicePart> getPartsByServiceEntry(Long serviceEntryId) {
+        return servicePartRepository.findByServiceEntryId(serviceEntryId);
     }
 }
