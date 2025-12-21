@@ -11,22 +11,34 @@ public class ServiceEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Integer odometerReading;
 
+    @Column(nullable = false)
     private String serviceType;
 
+    @Column(nullable = false)
     private LocalDate serviceDate;
 
     @ManyToOne
-    @JoinColumn(name = "garage_id")
+    @JoinColumn(name = "garage_id", nullable = false)
     private Garage garage;
 
     @ManyToOne
-    @JoinColumn(name = "vehicle_id")
+    @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
 
+    // ===== Constructors =====
+    public ServiceEntry() {
+    }
+
+    // ===== Getters & Setters =====
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getOdometerReading() {
