@@ -1,6 +1,5 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
-import com.example.demo.service.AuthService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -8,6 +7,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String login() {
-        return "Login successful";
+        return "Login OK";
     }
 }
