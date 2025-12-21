@@ -8,16 +8,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class GarageServiceImpl implements GarageService {
 
-    private final GarageRepository repo;
+    private final GarageRepository garageRepository;
 
-    public GarageServiceImpl(GarageRepository repo) {
-        this.repo = repo;
+    public GarageServiceImpl(GarageRepository garageRepository) {
+        this.garageRepository = garageRepository;
     }
 
-    public Garage createGarage(Garage g) {
-        if (repo.findByGarageName(g.getGarageName()).isPresent()) {
-            throw new IllegalArgumentException("Garage already exists");
-        }
-        return repo.save(g);
+    @Override
+    public Garage createGarage(Garage garage) {
+        return garageRepository.save(garage);
     }
 }
