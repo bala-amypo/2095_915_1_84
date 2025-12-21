@@ -16,12 +16,24 @@ public class VerificationLog {
 
     private LocalDateTime verifiedAt;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+         return id;
+    }
+    public void setId(Long id) { 
+        this.id = id; 
+    }
 
-    public ServiceEntry getServiceEntry() { return serviceEntry; }
-    public void setServiceEntry(ServiceEntry serviceEntry) { this.serviceEntry = serviceEntry; }
+    public ServiceEntry getServiceEntry() {
+         return serviceEntry;
+    }
+    public void setServiceEntry(ServiceEntry serviceEntry) {
+         this.serviceEntry = serviceEntry; 
+    }
 
-    public LocalDateTime getVerifiedAt() { return verifiedAt; }
-    public void setVerifiedAt(LocalDateTime verifiedAt) { this.verifiedAt = verifiedAt; }
+    public LocalDateTime getVerifiedAt() {
+         return verifiedAt;
+    }
+    public void setVerifiedAt(LocalDateTime verifiedAt) {
+         this.verifiedAt = verifiedAt; 
+    }
 }

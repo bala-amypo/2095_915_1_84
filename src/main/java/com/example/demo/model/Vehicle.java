@@ -16,7 +16,6 @@ public class Vehicle {
     private Long ownerId;
     private Boolean active = true;
 
-    // ===== Getters & Setters =====
 
     public Long getId() {
         return id;

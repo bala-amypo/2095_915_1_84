@@ -23,12 +23,24 @@ public class ServicePart {
          this.id = id; 
     }
 
-    public ServiceEntry getServiceEntry() { return serviceEntry; }
-    public void setServiceEntry(ServiceEntry serviceEntry) { this.serviceEntry = serviceEntry; }
+    public ServiceEntry getServiceEntry() { 
+        return serviceEntry;
+    }
+    public void setServiceEntry(ServiceEntry serviceEntry) { 
+        this.serviceEntry = serviceEntry;
+    }
 
-    public String getPartName() { return partName; }
-    public void setPartName(String partName) { this.partName = partName; }
+    public String getPartName() {
+         return partName; 
+    }
+    public void setPartName(String partName) {
+         this.partName = partName;
+    }
 
-    public Integer getQuantity() { return quantity; }
-    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public Integer getQuantity() {
+         return quantity;
+    }
+    public void setQuantity(Integer quantity) {
+         this.quantity = quantity;
+    }
 }
