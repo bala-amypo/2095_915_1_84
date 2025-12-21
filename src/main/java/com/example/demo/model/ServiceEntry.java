@@ -29,11 +29,11 @@ public class ServiceEntry {
     @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
 
-    // ===== Constructors =====
+    
     public ServiceEntry() {
+
     }
 
-    // ===== Getters & Setters =====
     public Long getId() {
         return id;
     }
