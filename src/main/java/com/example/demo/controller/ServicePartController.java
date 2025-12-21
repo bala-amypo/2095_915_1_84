@@ -16,6 +16,6 @@ public class ServicePartController {
 
     @PostMapping
     public ServicePart createPart(@RequestBody ServicePart part) {
-        return servicePartService.createPart(part);
+        return servicePartService.createServicePart(part);
     }
 }
