@@ -12,6 +12,8 @@ public class Garage {
 
     private String name;
 
+    private Boolean active;   // ✅ ADD THIS
+
     public Garage() {}
 
     public Long getId() {
@@ -28,5 +30,14 @@ public class Garage {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    // ✅ REQUIRED GETTER
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
