@@ -7,6 +7,8 @@ import com.example.demo.service.ServiceEntryService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ServiceEntryServiceImpl implements ServiceEntryService {
 
@@ -14,6 +16,16 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
 
     public ServiceEntryServiceImpl(ServiceEntryRepository serviceEntryRepository) {
         this.serviceEntryRepository = serviceEntryRepository;
+    }
+
+    @Override
+    public ServiceEntry createServiceEntry(ServiceEntry entry) {
+        return serviceEntryRepository.save(entry);
+    }
+
+    @Override
+    public List<ServiceEntry> getEntriesForVehicle(Long vehicleId) {
+        return serviceEntryRepository.findByVehicleId(vehicleId);
     }
 
     @Override
