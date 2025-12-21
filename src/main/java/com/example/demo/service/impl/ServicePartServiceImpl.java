@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // 🔴 THIS ANNOTATION IS CRITICAL
+@Service   
 public class ServicePartServiceImpl implements ServicePartService {
 
     private final ServicePartRepository servicePartRepository;
