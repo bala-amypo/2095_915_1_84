@@ -14,7 +14,7 @@ public class SwaggerConfig {
         return new OpenAPI()
 
                 .servers(List.of(
-                        new Server().url("")
+                        new Server().url("https://9007.pro604cr.amypo.ai/")
                 ));
         }
 }
