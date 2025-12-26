@@ -2,11 +2,7 @@ package com.example.demo.model;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "service_entries")
@@ -16,39 +12,50 @@ public class ServiceEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long vehicleId;
-    private Long garageId;
+    @ManyToOne
+    private Vehicle vehicle;
+
+    @ManyToOne
+    private Garage garage;
+
+    private String serviceType;
+
     private LocalDate serviceDate;
+
     private Integer odometerReading;
 
-    // ✅ REQUIRED no-arg constructor
     public ServiceEntry() {}
-
-    // ✅ REQUIRED getters & setters
 
     public Long getId() {
         return id;
     }
 
-    // ⚠️ Some tests call setId()
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getVehicleId() {
-        return vehicleId;
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
-    public void setVehicleId(Long vehicleId) {
-        this.vehicleId = vehicleId;
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 
-    public Long getGarageId() {
-        return garageId;
+    public Garage getGarage() {
+        return garage;
     }
 
-    public void setGarageId(Long garageId) {
-        this.garageId = garageId;
+    public void setGarage(Garage garage) {
+        this.garage = garage;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 
     public LocalDate getServiceDate() {
