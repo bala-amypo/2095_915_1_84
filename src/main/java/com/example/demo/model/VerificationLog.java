@@ -2,7 +2,10 @@ package com.example.demo.model;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class VerificationLog {
@@ -12,8 +15,9 @@ public class VerificationLog {
     private Long id;
 
     private String message;
-
     private LocalDateTime verifiedAt;
+
+    public VerificationLog() {}
 
     public Long getId() {
         return id;
@@ -23,19 +27,19 @@ public class VerificationLog {
         this.id = id;
     }
 
-    public LocalDateTime getVerifiedAt() {
-        return verifiedAt;
-    }
-
-    public void setVerifiedAt(LocalDateTime verifiedAt) {
-        this.verifiedAt = verifiedAt;
-    }
-
     public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public LocalDateTime getVerifiedAt() {
+        return verifiedAt;
+    }
+
+    public void setVerifiedAt(LocalDateTime verifiedAt) {
+        this.verifiedAt = verifiedAt;
     }
 }

@@ -21,14 +21,18 @@ public class ServiceEntry {
     private LocalDate serviceDate;
     private Integer odometerReading;
 
-    // ✅ REQUIRED: no-arg constructor
-    public ServiceEntry() {
-    }
+    // ✅ REQUIRED no-arg constructor
+    public ServiceEntry() {}
 
-    // ✅ GETTERS & SETTERS (THIS WAS THE PROBLEM)
+    // ✅ REQUIRED getters & setters
 
     public Long getId() {
         return id;
+    }
+
+    // ⚠️ Some tests call setId()
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getVehicleId() {

@@ -19,48 +19,44 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
         this.serviceEntryRepository = serviceEntryRepository;
     }
 
-    // ✅ REQUIRED BY INTERFACE
     @Override
     public ServiceEntry createServiceEntry(
             Long vehicleId,
             Long garageId,
             LocalDate serviceDate,
-            Integer odometer,
+            Integer odometerReading,
             List<ServicePart> parts) {
 
         ServiceEntry entry = new ServiceEntry();
         entry.setVehicleId(vehicleId);
         entry.setGarageId(garageId);
         entry.setServiceDate(serviceDate);
-        entry.setOdometerReading(odometer);
+        entry.setOdometerReading(odometerReading);
 
         return serviceEntryRepository.save(entry);
     }
 
-    // ✅ REQUIRED BY INTERFACE
     @Override
     public List<ServiceEntry> getEntriesForVehicle(Long vehicleId) {
         return serviceEntryRepository.findByVehicleId(vehicleId);
     }
 
-    // ✅ REQUIRED BY INTERFACE
     @Override
     public List<ServiceEntry> getEntriesForVehicleInRange(
             Long vehicleId,
-            LocalDate start,
-            LocalDate end) {
+            LocalDate from,
+            LocalDate to) {
 
         return serviceEntryRepository
-                .findByVehicleIdAndServiceDateBetween(vehicleId, start, end);
+                .findByVehicleIdAndServiceDateBetween(vehicleId, from, to);
     }
 
-    // ✅ REQUIRED BY INTERFACE
     @Override
     public List<ServiceEntry> getEntriesForGarageAboveOdometer(
             Long garageId,
-            Integer odometer) {
+            Integer minOdometer) {
 
         return serviceEntryRepository
-                .findByGarageIdAndOdometerReadingGreaterThan(garageId, odometer);
+                .findByGarageIdAndOdometerReadingGreaterThan(garageId, minOdometer);
     }
 }
