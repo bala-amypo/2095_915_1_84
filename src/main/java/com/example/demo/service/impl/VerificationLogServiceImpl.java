@@ -28,7 +28,7 @@ public class VerificationLogServiceImpl implements VerificationLogService {
 
     @Override
     public List<VerificationLog> getLogsForService(Long serviceEntryId) {
-        return verificationLogRepository.findByServiceEntryId(serviceEntryId);
+        return verificationLogRepository.findByServiceEntry_Id(serviceEntryId);
     }
 
     @Override
