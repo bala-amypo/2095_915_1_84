@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface GarageRepository extends JpaRepository<Garage, Long> {
 
+    // REQUIRED by tests
     Optional<Garage> findByGarageName(String garageName);
 }
