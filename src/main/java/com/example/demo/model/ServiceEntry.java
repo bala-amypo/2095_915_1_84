@@ -2,35 +2,49 @@ package com.example.demo.model;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "service_entries")
 public class ServiceEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long vehicleId;
+    private Long garageId;
     private LocalDate serviceDate;
-
     private Integer odometerReading;
 
-    private String serviceType;
+    // ✅ REQUIRED: no-arg constructor
+    public ServiceEntry() {
+    }
 
-    @ManyToOne
-    private Vehicle vehicle;
-
-    @ManyToOne
-    private Garage garage;
-
-    // ---------- getters & setters ----------
+    // ✅ GETTERS & SETTERS (THIS WAS THE PROBLEM)
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(Long vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    public Long getGarageId() {
+        return garageId;
+    }
+
+    public void setGarageId(Long garageId) {
+        this.garageId = garageId;
     }
 
     public LocalDate getServiceDate() {
@@ -47,29 +61,5 @@ public class ServiceEntry {
 
     public void setOdometerReading(Integer odometerReading) {
         this.odometerReading = odometerReading;
-    }
-
-    public String getServiceType() {
-        return serviceType;
-    }
-
-    public void setServiceType(String serviceType) {
-        this.serviceType = serviceType;
-    }
-
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
-    }
-
-    public Garage getGarage() {
-        return garage;
-    }
-
-    public void setGarage(Garage garage) {
-        this.garage = garage;
     }
 }
