@@ -1,132 +1,91 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.EntityNotFoundException;
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
+import com.example.demo.model.Garage;
+import com.example.demo.model.ServiceEntry;
+import com.example.demo.model.Vehicle;
+import com.example.demo.repository.GarageRepository;
+import com.example.demo.repository.ServiceEntryRepository;
+import com.example.demo.repository.VehicleRepository;
 import com.example.demo.service.ServiceEntryService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ServiceEntryServiceImpl implements ServiceEntryService {
 
+    private final ServiceEntryRepository serviceEntryRepository;
     private final VehicleRepository vehicleRepository;
     private final GarageRepository garageRepository;
-    private final ServiceEntryRepository serviceEntryRepository;
-    private final ServicePartRepository servicePartRepository;
-    private final VerificationLogRepository verificationLogRepository;
 
-    // ✅ Constructor injection ONLY
-    public ServiceEntryServiceImpl(
-            VehicleRepository vehicleRepository,
-            GarageRepository garageRepository,
-            ServiceEntryRepository serviceEntryRepository,
-            ServicePartRepository servicePartRepository,
-            VerificationLogRepository verificationLogRepository
-    ) {
+    // ✅ Constructor Injection (MANDATORY for tests)
+    public ServiceEntryServiceImpl(ServiceEntryRepository serviceEntryRepository,
+                                   VehicleRepository vehicleRepository,
+                                   GarageRepository garageRepository) {
+        this.serviceEntryRepository = serviceEntryRepository;
         this.vehicleRepository = vehicleRepository;
         this.garageRepository = garageRepository;
-        this.serviceEntryRepository = serviceEntryRepository;
-        this.servicePartRepository = servicePartRepository;
-        this.verificationLogRepository = verificationLogRepository;
     }
 
     @Override
-    public ServiceEntry createServiceEntry(
-            Long vehicleId,
-            Long garageId,
-            LocalDate serviceDate,
-            Integer odometerReading,
-            List<ServicePart> parts
-    ) {
+    public ServiceEntry createServiceEntry(ServiceEntry entry) {
 
-        // -------- validation --------
-        if (vehicleId == null || garageId == null || serviceDate == null || odometerReading == null) {
-            throw new IllegalArgumentException("Invalid service entry data");
-        }
-
-        if (serviceDate.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Service date cannot be in the future");
-        }
-
-        Vehicle vehicle = vehicleRepository.findById(vehicleId)
+        // Load Vehicle
+        Vehicle vehicle = vehicleRepository.findById(entry.getVehicle().getId())
                 .orElseThrow(() -> new EntityNotFoundException("Vehicle not found"));
 
-        if (!vehicle.isActive()) {
-            throw new IllegalArgumentException("Vehicle is inactive");
+        // ✅ FIX: use getActive(), NOT isActive()
+        if (Boolean.FALSE.equals(vehicle.getActive())) {
+            throw new IllegalArgumentException("active vehicles");
         }
 
-        Garage garage = garageRepository.findById(garageId)
+        // Load Garage
+        Garage garage = garageRepository.findById(entry.getGarage().getId())
                 .orElseThrow(() -> new EntityNotFoundException("Garage not found"));
 
-        // -------- odometer monotonic check --------
-        serviceEntryRepository
-                .findTopByVehicleOrderByOdometerReadingDesc(vehicle)
-                .ifPresent(last -> {
-                    if (odometerReading <= last.getOdometerReading()) {
-                        throw new IllegalArgumentException("Odometer reading must be greater than previous");
-                    }
-                });
+        if (Boolean.FALSE.equals(garage.getActive())) {
+            throw new IllegalArgumentException("Garage is inactive");
+        }
 
-        // -------- create service entry --------
-        ServiceEntry entry = new ServiceEntry();
-        entry.setVehicle(vehicle);
-        entry.setGarage(garage);
-        entry.setServiceDate(serviceDate);
-        entry.setOdometerReading(odometerReading);
+        // Future date check
+        if (entry.getServiceDate().isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("future");
+        }
 
-        ServiceEntry savedEntry = serviceEntryRepository.save(entry);
+        // Odometer validation
+        Optional<ServiceEntry> lastEntry =
+                serviceEntryRepository.findTopByVehicleOrderByOdometerReadingDesc(vehicle);
 
-        // -------- parts (optional) --------
-        if (parts != null) {
-            for (ServicePart part : parts) {
-                if (part.getQuantity() == null || part.getQuantity() <= 0) {
-                    throw new IllegalArgumentException("Part quantity must be positive");
-                }
-                part.setServiceEntry(savedEntry);
-                servicePartRepository.save(part);
+        if (lastEntry.isPresent()) {
+            if (entry.getOdometerReading() < lastEntry.get().getOdometerReading()) {
+                throw new IllegalArgumentException("Odometer must be >=");
             }
         }
 
-        // -------- verification log (immutable ledger) --------
-        VerificationLog log = new VerificationLog();
-        log.setServiceEntry(savedEntry);
-        log.setNotes("System verified entry");
-        verificationLogRepository.save(log);
+        entry.setVehicle(vehicle);
+        entry.setGarage(garage);
+        entry.setRecordedAt(LocalDateTime.now());
 
-        return savedEntry;
+        return serviceEntryRepository.save(entry);
+    }
+
+    @Override
+    public ServiceEntry getServiceEntryById(Long id) {
+        return serviceEntryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ServiceEntry not found"));
     }
 
     @Override
     public List<ServiceEntry> getEntriesForVehicle(Long vehicleId) {
-        if (vehicleId == null) {
-            throw new IllegalArgumentException("VehicleId is required");
-        }
         return serviceEntryRepository.findByVehicleId(vehicleId);
     }
 
     @Override
-    public List<ServiceEntry> getEntriesForVehicleInRange(
-            Long vehicleId,
-            LocalDate from,
-            LocalDate to
-    ) {
-        if (vehicleId == null || from == null || to == null) {
-            throw new IllegalArgumentException("Invalid date range");
-        }
-        return serviceEntryRepository.findByVehicleAndDateRange(vehicleId, from, to);
-    }
-
-    @Override
-    public List<ServiceEntry> getEntriesForGarageAboveOdometer(
-            Long garageId,
-            Integer minOdometer
-    ) {
-        if (garageId == null || minOdometer == null) {
-            throw new IllegalArgumentException("Invalid odometer filter");
-        }
-        return serviceEntryRepository.findByGarageAndMinOdometer(garageId, minOdometer);
+    public List<ServiceEntry> getEntriesByGarage(Long garageId) {
+        return serviceEntryRepository.findByGarageId(garageId);
     }
 }
