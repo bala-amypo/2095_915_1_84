@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import java.time.LocalDate;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -12,11 +11,14 @@ public class ServiceEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long vehicleId;
+    @ManyToOne(optional = false)
+    private Vehicle vehicle;
+
+    @ManyToOne(optional = false)
+    private Garage garage;
 
     @Column(nullable = false)
-    private Long garageId;
+    private String serviceType;
 
     @Column(nullable = false)
     private LocalDate serviceDate;
@@ -30,20 +32,32 @@ public class ServiceEntry {
         return id;
     }
 
-    public Long getVehicleId() {
-        return vehicleId;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void setVehicleId(Long vehicleId) {
-        this.vehicleId = vehicleId;
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
-    public Long getGarageId() {
-        return garageId;
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
     }
 
-    public void setGarageId(Long garageId) {
-        this.garageId = garageId;
+    public Garage getGarage() {
+        return garage;
+    }
+
+    public void setGarage(Garage garage) {
+        this.garage = garage;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
     }
 
     public LocalDate getServiceDate() {
