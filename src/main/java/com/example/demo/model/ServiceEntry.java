@@ -1,7 +1,8 @@
 package com.example.demo.model;
 
-
 import jakarta.persistence.*;
+
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 @Entity
@@ -12,8 +13,13 @@ public class ServiceEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Integer odometerReading;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "vehicle_id", nullable = false)
+    private Vehicle vehicle;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "garage_id", nullable = false)
+    private Garage garage;
 
     @Column(nullable = false)
     private String serviceType;
@@ -21,18 +27,20 @@ public class ServiceEntry {
     @Column(nullable = false)
     private LocalDate serviceDate;
 
-    @ManyToOne
-    @JoinColumn(name = "garage_id", nullable = false)
-    private Garage garage;
+    @Column(nullable = false)
+    private Integer odometerReading;
 
-    @ManyToOne
-    @JoinColumn(name = "vehicle_id", nullable = false)
-    private Vehicle vehicle;
+    private String description;
 
-    
-    public ServiceEntry() {
+    @Column(nullable = false, updatable = false)
+    private Timestamp recordedAt;
 
+    @PrePersist
+    protected void onCreate() {
+        this.recordedAt = new Timestamp(System.currentTimeMillis());
     }
+
+    // -------- getters & setters --------
 
     public Long getId() {
         return id;
@@ -42,12 +50,20 @@ public class ServiceEntry {
         this.id = id;
     }
 
-    public Integer getOdometerReading() {
-        return odometerReading;
+    public Vehicle getVehicle() {
+        return vehicle;
     }
 
-    public void setOdometerReading(Integer odometerReading) {
-        this.odometerReading = odometerReading;
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Garage getGarage() {
+        return garage;
+    }
+
+    public void setGarage(Garage garage) {
+        this.garage = garage;
     }
 
     public String getServiceType() {
@@ -66,19 +82,23 @@ public class ServiceEntry {
         this.serviceDate = serviceDate;
     }
 
-    public Garage getGarage() {
-        return garage;
+    public Integer getOdometerReading() {
+        return odometerReading;
     }
 
-    public void setGarage(Garage garage) {
-        this.garage = garage;
+    public void setOdometerReading(Integer odometerReading) {
+        this.odometerReading = odometerReading;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
+    public String getDescription() {
+        return description;
     }
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Timestamp getRecordedAt() {
+        return recordedAt;
     }
 }
