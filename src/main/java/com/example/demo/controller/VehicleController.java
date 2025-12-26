@@ -2,46 +2,44 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Vehicle;
 import com.example.demo.service.VehicleService;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/vehicles")
+@RequestMapping("/api/vehicles")
 public class VehicleController {
-
     private final VehicleService vehicleService;
 
-    // ✅ Constructor injection only
     public VehicleController(VehicleService vehicleService) {
         this.vehicleService = vehicleService;
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Vehicle createVehicle(@RequestBody Vehicle vehicle) {
-        return vehicleService.createVehicle(vehicle);
+    public ResponseEntity<Vehicle> createVehicle(@RequestBody Vehicle vehicle) {
+        return ResponseEntity.ok(vehicleService.createVehicle(vehicle));
     }
 
     @GetMapping("/{id}")
-    public Vehicle getVehicleById(@PathVariable Long id) {
-        return vehicleService.getVehicleById(id);
+    public ResponseEntity<Vehicle> getVehicle(@PathVariable Long id) {
+        return vehicleService.getVehicleById(id)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/vin/{vin}")
-    public Vehicle getVehicleByVin(@PathVariable String vin) {
-        return vehicleService.getVehicleByVin(vin);
+    @GetMapping
+    public ResponseEntity<List<Vehicle>> getAllVehicles() {
+        return ResponseEntity.ok(vehicleService.getAllVehicles());
     }
 
     @GetMapping("/owner/{ownerId}")
-    public List<Vehicle> getVehiclesByOwner(@PathVariable Long ownerId) {
-        return vehicleService.getVehiclesByOwner(ownerId);
+    public ResponseEntity<List<Vehicle>> getVehiclesByOwner(@PathVariable Long ownerId) {
+        return ResponseEntity.ok(vehicleService.getVehiclesByOwner(ownerId));
     }
 
     @PutMapping("/{id}/deactivate")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deactivateVehicle(@PathVariable Long id) {
-        vehicleService.deactivateVehicle(id);
+    public ResponseEntity<Vehicle> deactivateVehicle(@PathVariable Long id) {
+        return ResponseEntity.ok(vehicleService.deactivateVehicle(id));
     }
 }

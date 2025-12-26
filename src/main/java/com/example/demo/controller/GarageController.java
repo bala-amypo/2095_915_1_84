@@ -2,33 +2,39 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Garage;
 import com.example.demo.service.GarageService;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/garages")
-public class GarageController {
+import java.util.List;
 
+@RestController
+@RequestMapping("/api/garages")
+public class GarageController {
     private final GarageService garageService;
 
-    // ✅ Constructor injection only
     public GarageController(GarageService garageService) {
         this.garageService = garageService;
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Garage createGarage(@RequestBody Garage garage) {
-        return garageService.createGarage(garage);
+    public ResponseEntity<Garage> createGarage(@RequestBody Garage garage) {
+        return ResponseEntity.ok(garageService.createGarage(garage));
     }
 
     @GetMapping("/{id}")
-    public Garage getGarageById(@PathVariable Long id) {
-        return garageService.getGarageById(id);
+    public ResponseEntity<Garage> getGarage(@PathVariable Long id) {
+        return garageService.getGarageById(id)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/name/{name}")
-    public Garage getGarageByName(@PathVariable String name) {
-        return garageService.getGarageByName(name);
+    @GetMapping
+    public ResponseEntity<List<Garage>> getAllGarages() {
+        return ResponseEntity.ok(garageService.getAllGarages());
+    }
+
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<Garage> deactivateGarage(@PathVariable Long id) {
+        return ResponseEntity.ok(garageService.deactivateGarage(id));
     }
 }
