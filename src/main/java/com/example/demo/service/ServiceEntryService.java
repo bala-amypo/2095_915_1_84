@@ -8,7 +8,6 @@ import com.example.demo.model.ServicePart;
 
 public interface ServiceEntryService {
 
-    // CREATE SERVICE ENTRY
     ServiceEntry createServiceEntry(
             Long vehicleId,
             Long garageId,
@@ -17,14 +16,14 @@ public interface ServiceEntryService {
             List<ServicePart> parts
     );
 
-    // GET SERVICE ENTRIES FOR VEHICLE BETWEEN DATES
+    List<ServiceEntry> getEntriesForVehicle(Long vehicleId);
+
     List<ServiceEntry> getEntriesForVehicleInRange(
             Long vehicleId,
             LocalDate startDate,
             LocalDate endDate
     );
 
-    // GET SERVICE ENTRIES FOR GARAGE ABOVE ODOMETER
     List<ServiceEntry> getEntriesForGarageAboveOdometer(
             Long garageId,
             Integer minOdometer
