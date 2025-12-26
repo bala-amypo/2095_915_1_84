@@ -26,12 +26,11 @@ public class VerificationLogServiceImpl implements VerificationLogService {
     @Override
     public VerificationLog createLog(VerificationLog log) {
 
-        ServiceEntry entry = serviceEntryRepository.findById(log.getServiceEntry().getId())
+        Long entryId = log.getServiceEntry().getId();
+        ServiceEntry entry = serviceEntryRepository.findById(entryId)
                 .orElseThrow(() -> new EntityNotFoundException("ServiceEntry not found"));
 
         log.setServiceEntry(entry);
-        // ❌ DO NOT set verifiedAt manually
-
         return verificationLogRepository.save(log);
     }
 
