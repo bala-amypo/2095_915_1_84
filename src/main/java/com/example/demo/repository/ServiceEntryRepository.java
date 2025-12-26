@@ -2,28 +2,30 @@ package com.example.demo.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import com.example.demo.model.ServiceEntry;
+import com.example.demo.model.Vehicle;
 
-@Repository
 public interface ServiceEntryRepository extends JpaRepository<ServiceEntry, Long> {
 
-    // Get all service entries for a vehicle
-    List<ServiceEntry> findByVehicleId(Long vehicleId);
+    Optional<ServiceEntry> findTopByVehicleOrderByOdometerReadingDesc(Vehicle vehicle);
 
-    // Get service entries for a vehicle between dates
-    List<ServiceEntry> findByVehicleIdAndServiceDateBetween(
-            Long vehicleId,
-            LocalDate startDate,
-            LocalDate endDate
-    );
-
-    // Get service entries for a garage where odometer reading is above a value
     List<ServiceEntry> findByGarageIdAndOdometerReadingGreaterThan(
-            Long garageId,
-            Integer odometer
-    );
+            Long garageId, int odometer);
+
+    // aliases expected by tests
+    default List<ServiceEntry> findByGarageAndMinOdometer(long garageId, int min) {
+        return findByGarageIdAndOdometerReadingGreaterThan(garageId, min);
+    }
+
+    default List<ServiceEntry> findByVehicleAndDateRange(
+            long vehicleId, LocalDate start, LocalDate end) {
+        return findByVehicleIdAndServiceDateBetween(vehicleId, start, end);
+    }
+
+    List<ServiceEntry> findByVehicleIdAndServiceDateBetween(
+            Long vehicleId, LocalDate start, LocalDate end);
 }

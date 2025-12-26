@@ -2,57 +2,35 @@ package com.example.demo.model;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "service_entries")
 public class ServiceEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "vehicle_id", nullable = false)
-    private Long vehicleId;
-
-    @Column(name = "garage_id", nullable = false)
-    private Long garageId;
-
-    @Column(name = "service_date", nullable = false)
     private LocalDate serviceDate;
 
-    @Column(name = "odometer_reading", nullable = false)
     private Integer odometerReading;
 
-    // ✅ Default constructor (required by JPA)
-    public ServiceEntry() {
-    }
+    private String serviceType;
 
-    // ✅ Getters & Setters
+    @ManyToOne
+    private Vehicle vehicle;
+
+    @ManyToOne
+    private Garage garage;
+
+    // ---------- getters & setters ----------
 
     public Long getId() {
         return id;
     }
 
-    public Long getVehicleId() {
-        return vehicleId;
-    }
-
-    public void setVehicleId(Long vehicleId) {
-        this.vehicleId = vehicleId;
-    }
-
-    public Long getGarageId() {
-        return garageId;
-    }
-
-    public void setGarageId(Long garageId) {
-        this.garageId = garageId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate getServiceDate() {
@@ -69,5 +47,29 @@ public class ServiceEntry {
 
     public void setOdometerReading(Integer odometerReading) {
         this.odometerReading = odometerReading;
+    }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
+
+    public Vehicle getVehicle() {
+        return vehicle;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    public Garage getGarage() {
+        return garage;
+    }
+
+    public void setGarage(Garage garage) {
+        this.garage = garage;
     }
 }
