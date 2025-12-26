@@ -1,27 +1,29 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.ServiceEntry;
-import com.example.demo.model.Vehicle;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.example.demo.model.ServiceEntry;
+
+@Repository
 public interface ServiceEntryRepository extends JpaRepository<ServiceEntry, Long> {
 
-    // REQUIRED (exact name & params)
-    Optional<ServiceEntry> findTopByVehicleOrderByOdometerReadingDesc(Vehicle vehicle);
-
-    // REQUIRED (exact camel case used by tests)
+    // Get all service entries for a vehicle
     List<ServiceEntry> findByVehicleId(Long vehicleId);
 
-    // Used by advanced HQL tests (mocked only)
-    @Query("select s from ServiceEntry s where s.garage.id = :garageId and s.odometerReading > :minOdometer")
-    List<ServiceEntry> findByGarageAndMinOdometer(Long garageId, Integer minOdometer);
+    // Get service entries for a vehicle between dates
+    List<ServiceEntry> findByVehicleIdAndServiceDateBetween(
+            Long vehicleId,
+            LocalDate startDate,
+            LocalDate endDate
+    );
 
-    // Used by advanced HQL tests (mocked only)
-    @Query("select s from ServiceEntry s where s.vehicle.id = :vehicleId and s.serviceDate between :from and :to")
-    List<ServiceEntry> findByVehicleAndDateRange(Long vehicleId, LocalDate from, LocalDate to);
+    // Get service entries for a garage where odometer reading is above a value
+    List<ServiceEntry> findByGarageIdAndOdometerReadingGreaterThan(
+            Long garageId,
+            Integer odometer
+    );
 }
