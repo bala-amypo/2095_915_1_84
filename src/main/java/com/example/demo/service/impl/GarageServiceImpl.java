@@ -1,44 +1,45 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.EntityNotFoundException;
 import com.example.demo.model.Garage;
 import com.example.demo.repository.GarageRepository;
 import com.example.demo.service.GarageService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GarageServiceImpl implements GarageService {
-
     private final GarageRepository garageRepository;
 
-    // ✅ Constructor injection only
     public GarageServiceImpl(GarageRepository garageRepository) {
         this.garageRepository = garageRepository;
     }
 
     @Override
     public Garage createGarage(Garage garage) {
-        if (garage == null || garage.getGarageName() == null || garage.getGarageName().isBlank()) {
-            throw new IllegalArgumentException("Garage name is required");
+        if (garageRepository.findByGarageName(garage.getGarageName()).isPresent()) {
+            throw new IllegalArgumentException("Garage name already exists");
         }
-
-        garageRepository.findByGarageName(garage.getGarageName())
-                .ifPresent(g -> {
-                    throw new IllegalArgumentException("Garage already exists");
-                });
-
         return garageRepository.save(garage);
     }
 
     @Override
-    public Garage getGarageById(Long id) {
-        return garageRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Garage not found"));
+    public Optional<Garage> getGarageById(Long id) {
+        return garageRepository.findById(id);
     }
 
     @Override
-    public Garage getGarageByName(String name) {
-        return garageRepository.findByGarageName(name)
-                .orElseThrow(() -> new EntityNotFoundException("Garage not found"));
+    public List<Garage> getAllGarages() {
+        return garageRepository.findAll();
+    }
+
+    @Override
+    public Garage deactivateGarage(Long id) {
+        Garage garage = garageRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Garage not found"));
+        garage.setActive(false);
+        return garageRepository.save(garage);
     }
 }
