@@ -7,10 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
-
-    // REQUIRED by tests
     Optional<Vehicle> findByVin(String vin);
-
-    // REQUIRED by tests (note: ownerId exact camel case)
     List<Vehicle> findByOwnerId(Long ownerId);
+    List<Vehicle> findByActive(Boolean active);
 }

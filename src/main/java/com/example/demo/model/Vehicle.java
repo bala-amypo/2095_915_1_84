@@ -1,104 +1,49 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
-@Table(
-    name = "vehicles",
-    uniqueConstraints = @UniqueConstraint(columnNames = "vin")
-)
+@Table(name = "vehicles")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Vehicle {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @NotBlank
+    @Column(unique = true)
     private String vin;
 
+    @NotBlank
     private String make;
 
+    @NotBlank
     private String model;
 
-    private Integer year;
-
-    @Column(nullable = false)
+    @NotNull
     private Long ownerId;
 
-    @Column(nullable = false)
+    @Builder.Default
     private Boolean active = true;
 
-    @Column(nullable = false, updatable = false)
-    private Timestamp createdAt;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = new Timestamp(System.currentTimeMillis());
-        if (this.active == null) {
-            this.active = true;
-        }
-    }
-
-    // -------- getters & setters --------
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getVin() {
-        return vin;
-    }
-
-    public void setVin(String vin) {
+    public Vehicle(String vin, String make, String model, Long ownerId) {
         this.vin = vin;
-    }
-
-    public String getMake() {
-        return make;
-    }
-
-    public void setMake(String make) {
         this.make = make;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
         this.model = model;
-    }
-
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
-    public Long getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
+        this.active = true;
     }
 }

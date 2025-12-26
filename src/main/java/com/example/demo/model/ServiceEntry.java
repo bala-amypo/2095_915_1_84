@@ -1,78 +1,79 @@
 package com.example.demo.model;
 
-import java.time.LocalDate;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "service_entries")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class ServiceEntry {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
-    @ManyToOne(optional = false)
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "garage_id")
     private Garage garage;
 
-    @Column(nullable = false)
+    @NotBlank
     private String serviceType;
 
-    @Column(nullable = false)
+    @NotNull
+    @PastOrPresent
     private LocalDate serviceDate;
 
-    @Column(nullable = false)
-    private Integer odometerReading;
+    @NotNull
+    @Positive
+    private Long odometerReading;
 
-    // ---------- GETTERS & SETTERS ----------
+    @NotNull
+    @Positive
+    private BigDecimal cost;
 
-    public Long getId() {
-        return id;
-    }
+    @Lob
+    @Size(max = 2000)
+    private String notes;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    @CreationTimestamp
+    private LocalDateTime submittedAt;
 
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
-    }
-
-    public Garage getGarage() {
-        return garage;
-    }
-
-    public void setGarage(Garage garage) {
-        this.garage = garage;
-    }
-
-    public String getServiceType() {
-        return serviceType;
-    }
-
-    public void setServiceType(String serviceType) {
+    public ServiceEntry(Long vehicleId, Long garageId, String serviceType, LocalDate serviceDate, Long odometerReading, BigDecimal cost) {
         this.serviceType = serviceType;
-    }
-
-    public LocalDate getServiceDate() {
-        return serviceDate;
-    }
-
-    public void setServiceDate(LocalDate serviceDate) {
         this.serviceDate = serviceDate;
-    }
-
-    public Integer getOdometerReading() {
-        return odometerReading;
-    }
-
-    public void setOdometerReading(Integer odometerReading) {
         this.odometerReading = odometerReading;
+        this.cost = cost;
+    }
+
+    public Long getVehicleId() {
+        return vehicle != null ? vehicle.getId() : null;
+    }
+
+    public void setVehicleId(Long vehicleId) {
+        // This is handled by the vehicle relationship
+    }
+
+    public Long getGarageId() {
+        return garage != null ? garage.getId() : null;
+    }
+
+    public void setGarageId(Long garageId) {
+        // This is handled by the garage relationship
     }
 }

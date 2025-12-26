@@ -1,54 +1,45 @@
 package com.example.demo.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
-
 @Entity
+@Table(name = "verification_logs")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class VerificationLog {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String message;
-
-    private LocalDateTime verifiedAt;
-
+    @NotNull
     @ManyToOne
+    @JoinColumn(name = "service_entry_id")
     private ServiceEntry serviceEntry;
 
-    public VerificationLog() {}
+    @CreationTimestamp
+    private LocalDateTime verifiedAt;
 
-    public Long getId() {
-        return id;
+    @NotBlank
+    private String verifiedBy;
+
+    public VerificationLog(Long serviceEntryId, String verifiedBy) {
+        this.verifiedBy = verifiedBy;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getServiceEntryId() {
+        return serviceEntry != null ? serviceEntry.getId() : null;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public LocalDateTime getVerifiedAt() {
-        return verifiedAt;
-    }
-
-    public void setVerifiedAt(LocalDateTime verifiedAt) {
-        this.verifiedAt = verifiedAt;
-    }
-
-    public ServiceEntry getServiceEntry() {
-        return serviceEntry;
-    }
-
-    public void setServiceEntry(ServiceEntry serviceEntry) {
-        this.serviceEntry = serviceEntry;
+    public void setServiceEntryId(Long serviceEntryId) {
+        // This is handled by the serviceEntry relationship
     }
 }

@@ -1,78 +1,51 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "service_parts")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class ServicePart {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "service_entry_id", nullable = false)
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "service_entry_id")
     private ServiceEntry serviceEntry;
 
-    @Column(nullable = false)
+    @NotBlank
     private String partName;
 
-    private String partNumber;
-
-    private BigDecimal cost;
-
-    @Column(nullable = false)
+    @NotNull
+    @Positive
     private Integer quantity;
 
-    // -------- getters & setters --------
+    @NotNull
+    @Positive
+    private BigDecimal cost;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public ServiceEntry getServiceEntry() {
-        return serviceEntry;
-    }
-
-    public void setServiceEntry(ServiceEntry serviceEntry) {
-        this.serviceEntry = serviceEntry;
-    }
-
-    public String getPartName() {
-        return partName;
-    }
-
-    public void setPartName(String partName) {
+    public ServicePart(Long serviceEntryId, String partName, Integer quantity, BigDecimal cost) {
         this.partName = partName;
-    }
-
-    public String getPartNumber() {
-        return partNumber;
-    }
-
-    public void setPartNumber(String partNumber) {
-        this.partNumber = partNumber;
-    }
-
-    public BigDecimal getCost() {
-        return cost;
-    }
-
-    public void setCost(BigDecimal cost) {
+        this.quantity = quantity;
         this.cost = cost;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public Long getServiceEntryId() {
+        return serviceEntry != null ? serviceEntry.getId() : null;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setServiceEntryId(Long serviceEntryId) {
+        // This is handled by the serviceEntry relationship
     }
 }
