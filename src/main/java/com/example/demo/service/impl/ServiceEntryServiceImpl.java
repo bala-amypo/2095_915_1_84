@@ -65,7 +65,7 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
 
     @Override
     public List<ServiceEntry> getEntriesForVehicle(Long vehicleId) {
-        return serviceEntryRepository.findByVehicleId(vehicleId);
+        return serviceEntryRepository.findByVehicle_Id(vehicleId);
     }
 
     @Override
