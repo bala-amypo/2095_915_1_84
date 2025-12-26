@@ -1,28 +1,20 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.ServicePart;
-import com.example.demo.repository.ServicePartRepository;
-import com.example.demo.service.ServicePartService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.example.demo.model.ServicePart;
+import com.example.demo.repository.ServicePartRepository;
 
-@Service   
-public class ServicePartServiceImpl implements ServicePartService {
+@Service
+public class ServicePartServiceImpl {
 
-    private final ServicePartRepository servicePartRepository;
+    private final ServicePartRepository repository;
 
-    public ServicePartServiceImpl(ServicePartRepository servicePartRepository) {
-        this.servicePartRepository = servicePartRepository;
+    public ServicePartServiceImpl(ServicePartRepository repository) {
+        this.repository = repository;
     }
 
-    @Override
-    public ServicePart createServicePart(ServicePart part) {
-        return servicePartRepository.save(part);
-    }
-
-    @Override
-    public List<ServicePart> getPartsByServiceEntry(Long serviceEntryId) {
-        return servicePartRepository.findByServiceEntryId(serviceEntryId);
+    public ServicePart createPart(ServicePart part) {
+        return repository.save(part);
     }
 }
