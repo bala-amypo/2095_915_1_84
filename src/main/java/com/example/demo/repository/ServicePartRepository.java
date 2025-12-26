@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ServicePartRepository extends JpaRepository<ServicePart, Long> {
 
+    // REQUIRED by tests
     List<ServicePart> findByServiceEntryId(Long serviceEntryId);
 }
