@@ -2,14 +2,16 @@ package com.example.demo.controller;
 
 import com.example.demo.model.ServicePart;
 import com.example.demo.service.ServicePartService;
-import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/service-parts")
+@Tag(name = "Service Parts")
 public class ServicePartController {
+
     private final ServicePartService servicePartService;
 
     public ServicePartController(ServicePartService servicePartService) {
@@ -17,25 +19,17 @@ public class ServicePartController {
     }
 
     @PostMapping
-    public ResponseEntity<ServicePart> createServicePart(@RequestBody ServicePart part) {
-        return ResponseEntity.ok(servicePartService.createPart(part));
-    }
-
-    @GetMapping("/service/{serviceEntryId}")
-    public ResponseEntity<List<ServicePart>> getPartsForService(@PathVariable Long serviceEntryId) {
-        return ResponseEntity.ok(servicePartService.getPartsForService(serviceEntryId));
+    public ServicePart create(@RequestBody ServicePart part) {
+        return servicePartService.createPart(part);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ServicePart> getServicePart(@PathVariable Long id) {
-        return servicePartService.getPartById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+    public ServicePart getById(@PathVariable Long id) {
+        return servicePartService.getPartById(id);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ServicePart>> getAllServiceParts() {
-        // This would need a findAll method in the service
-        return ResponseEntity.ok(List.of());
+    @GetMapping("/entry/{entryId}")
+    public List<ServicePart> getByEntry(@PathVariable Long entryId) {
+        return servicePartService.getPartsForEntry(entryId);
     }
 }
