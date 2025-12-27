@@ -40,7 +40,16 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
         return serviceEntryRepository.findByVehicle_Id(vehicleId);
     }
 
-    // ✅ REQUIRED BY TESTS (helper, not interface)
+    // ✅ REQUIRED BY INTERFACE
+    @Override
+    public void deleteServiceEntry(Long id) {
+        if (!serviceEntryRepository.existsById(id)) {
+            throw new RuntimeException("ServiceEntry not found");
+        }
+        serviceEntryRepository.deleteById(id);
+    }
+
+    // ✅ REQUIRED BY TESTS (helper method, NOT interface)
     public List<ServiceEntry> getEntriesForVehicle(long vehicleId) {
         return serviceEntryRepository.findByVehicle_Id(vehicleId);
     }
