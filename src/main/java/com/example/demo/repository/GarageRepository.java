@@ -1,45 +1,18 @@
-package com.example.demo.model;
+package com.example.demo.repository;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import com.example.demo.model.Garage;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
-@Entity
-@Table(name = "verification_logs")
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-public class VerificationLog {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public interface GarageRepository extends JpaRepository<Garage, Long> {
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "service_entry_id")
-    private ServiceEntry serviceEntry;
+    Optional<Garage> findByName(String name);
 
-    @CreationTimestamp
-    private LocalDateTime verifiedAt;
+    List<Garage> findByActive(Boolean active);
 
-    @NotBlank
-    private String verifiedBy;
+    List<Garage> findByCity(String city);
 
-    public VerificationLog(Long serviceEntryId, String verifiedBy) {
-        this.verifiedBy = verifiedBy;
-    }
-
-    public Long getServiceEntryId() {
-        return serviceEntry != null ? serviceEntry.getId() : null;
-    }
-
-    public void setServiceEntryId(Long serviceEntryId) {
-        // This is handled by the serviceEntry relationship
-    }
+    List<Garage> findByOwnerId(Long ownerId);
 }
