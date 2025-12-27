@@ -20,19 +20,25 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
     @Autowired
     private VehicleRepository vehicleRepository;
 
-    // ===== REQUIRED BY TESTS =====
+    // ✅ REQUIRED BY INTERFACE
+    @Override
+    public List<ServiceEntry> getAllServiceEntries() {
+        return serviceEntryRepository.findAll();
+    }
+
+    // ✅ REQUIRED BY TESTS
     public List<ServiceEntry> getEntriesForVehicle(long vehicleId) {
         return serviceEntryRepository.findByVehicle_Id(vehicleId);
     }
 
-    // ===== Create Service Entry =====
+    // ✅ CREATE SERVICE ENTRY
+    @Override
     public ServiceEntry createServiceEntry(ServiceEntry entry, long vehicleId) {
 
         Vehicle vehicle = vehicleRepository
                 .findById(vehicleId)
                 .orElseThrow(() -> new RuntimeException("Vehicle not found"));
 
-        // Validate odometer monotonic increase
         serviceEntryRepository
                 .findTopByVehicle_IdOrderByOdometerReadingDesc(vehicleId)
                 .ifPresent(last -> {
@@ -47,7 +53,8 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
         return serviceEntryRepository.save(entry);
     }
 
-    // ===== Date Range =====
+    // ✅ DATE RANGE
+    @Override
     public List<ServiceEntry> getEntriesByDateRange(
             long vehicleId,
             LocalDate startDate,
@@ -58,7 +65,8 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
         );
     }
 
-    // ===== Latest Entry =====
+    // ✅ LATEST ENTRY
+    @Override
     public ServiceEntry getLatestServiceEntry(long vehicleId) {
         return serviceEntryRepository
                 .findTopByVehicle_IdOrderByOdometerReadingDesc(vehicleId)
