@@ -20,13 +20,11 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
     @Autowired
     private VehicleRepository vehicleRepository;
 
-    // ✅ REQUIRED BY INTERFACE
     @Override
     public List<ServiceEntry> getAllServiceEntries() {
         return serviceEntryRepository.findAll();
     }
 
-    // ✅ REQUIRED BY INTERFACE
     @Override
     public ServiceEntry getServiceEntryById(Long id) {
         return serviceEntryRepository
@@ -34,27 +32,11 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
                 .orElseThrow(() -> new RuntimeException("ServiceEntry not found"));
     }
 
-    // ✅ REQUIRED BY INTERFACE
     @Override
     public List<ServiceEntry> getServiceEntriesByVehicle(Long vehicleId) {
         return serviceEntryRepository.findByVehicle_Id(vehicleId);
     }
 
-    // ✅ REQUIRED BY INTERFACE
-    @Override
-    public void deleteServiceEntry(Long id) {
-        if (!serviceEntryRepository.existsById(id)) {
-            throw new RuntimeException("ServiceEntry not found");
-        }
-        serviceEntryRepository.deleteById(id);
-    }
-
-    // ✅ REQUIRED BY TESTS (helper method, NOT interface)
-    public List<ServiceEntry> getEntriesForVehicle(long vehicleId) {
-        return serviceEntryRepository.findByVehicle_Id(vehicleId);
-    }
-
-    // ✅ REQUIRED BY INTERFACE
     @Override
     public ServiceEntry createServiceEntry(ServiceEntry entry, Long vehicleId) {
 
@@ -76,19 +58,42 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
         return serviceEntryRepository.save(entry);
     }
 
-    // ✅ REQUIRED BY INTERFACE
+    @Override
+    public ServiceEntry updateServiceEntry(Long id, ServiceEntry updatedEntry) {
+
+        ServiceEntry existing = serviceEntryRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("ServiceEntry not found"));
+
+        existing.setServiceDate(updatedEntry.getServiceDate());
+        existing.setDescription(updatedEntry.getDescription());
+        existing.setOdometerReading(updatedEntry.getOdometerReading());
+        existing.setCost(updatedEntry.getCost());
+        existing.setGarage(updatedEntry.getGarage());
+
+        return serviceEntryRepository.save(existing);
+    }
+
+    @Override
+    public void deleteServiceEntry(Long id) {
+        if (!serviceEntryRepository.existsById(id)) {
+            throw new RuntimeException("ServiceEntry not found");
+        }
+        serviceEntryRepository.deleteById(id);
+    }
+
     @Override
     public List<ServiceEntry> getEntriesByDateRange(
             Long vehicleId,
             LocalDate startDate,
             LocalDate endDate
     ) {
-        return serviceEntryRepository.findByVehicleAndDateRange(
-                vehicleId, startDate, endDate
-        );
+        return serviceEntryRepository
+                .findByVehicle_IdAndServiceDateBetween(
+                        vehicleId, startDate, endDate
+                );
     }
 
-    // ✅ REQUIRED BY INTERFACE
     @Override
     public ServiceEntry getLatestServiceEntry(Long vehicleId) {
         return serviceEntryRepository
