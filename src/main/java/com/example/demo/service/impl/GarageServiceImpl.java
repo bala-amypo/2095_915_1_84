@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Service
 public class GarageServiceImpl implements GarageService {
+
     private final GarageRepository garageRepository;
 
     public GarageServiceImpl(GarageRepository garageRepository) {
@@ -19,7 +20,7 @@ public class GarageServiceImpl implements GarageService {
 
     @Override
     public Garage createGarage(Garage garage) {
-        if (garageRepository.findByGarageName(garage.getGarageName()).isPresent()) {
+        if (garageRepository.findByName(garage.getName()).isPresent()) {
             throw new IllegalArgumentException("Garage name already exists");
         }
         return garageRepository.save(garage);
@@ -38,7 +39,8 @@ public class GarageServiceImpl implements GarageService {
     @Override
     public Garage deactivateGarage(Long id) {
         Garage garage = garageRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Garage not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Garage not found"));
+
         garage.setActive(false);
         return garageRepository.save(garage);
     }
