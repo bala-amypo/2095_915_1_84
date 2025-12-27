@@ -17,23 +17,6 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
     }
 
     @Override
-    public ServiceEntry getLatestServiceEntry(Long vehicleId) {
-        return serviceEntryRepository
-                .findTopByVehicle_IdOrderByOdometerReadingDesc(vehicleId)
-                .orElse(null);
-    }
-
-    @Override
-    public List<ServiceEntry> getEntriesForVehicle(Long vehicleId) {
-        return serviceEntryRepository.findByVehicle_Id(vehicleId);
-    }
-
-    @Override
-    public List<ServiceEntry> getAllServiceEntries() {
-        return serviceEntryRepository.findAll();
-    }
-
-    @Override
     public ServiceEntry createServiceEntry(ServiceEntry entry) {
         return serviceEntryRepository.save(entry);
     }
@@ -48,5 +31,30 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
         existing.setGarage(entry.getGarage());
 
         return serviceEntryRepository.save(existing);
+    }
+
+    @Override
+    public void deleteServiceEntry(Long id) {
+        if (!serviceEntryRepository.existsById(id)) {
+            throw new RuntimeException("ServiceEntry not found");
+        }
+        serviceEntryRepository.deleteById(id);
+    }
+
+    @Override
+    public ServiceEntry getLatestServiceEntry(Long vehicleId) {
+        return serviceEntryRepository
+                .findTopByVehicle_IdOrderByOdometerReadingDesc(vehicleId)
+                .orElse(null);
+    }
+
+    @Override
+    public List<ServiceEntry> getEntriesForVehicle(Long vehicleId) {
+        return serviceEntryRepository.findByVehicle_Id(vehicleId);
+    }
+
+    @Override
+    public List<ServiceEntry> getAllServiceEntries() {
+        return serviceEntryRepository.findAll();
     }
 }
