@@ -12,30 +12,44 @@ import java.util.Optional;
 
 public interface ServiceEntryRepository extends JpaRepository<ServiceEntry, Long> {
 
-    // Get all service entries for a vehicle (by vehicle ID)
-    List<ServiceEntry> findByVehicle_Id(Long vehicleId);
+    // ===== Vehicle based queries =====
 
-    // Same as above, but required by tests (fixed using JPQL)
+    List<ServiceEntry> findByVehicle_Id(Long vehicleId);
+    List<ServiceEntry> findByVehicle_Id(long vehicleId); // for tests using int/long
+
     @Query("SELECT s FROM ServiceEntry s WHERE s.vehicle.id = :vehicleId")
     List<ServiceEntry> findByVehicleId(@Param("vehicleId") Long vehicleId);
 
-    // Find a service entry by its ID and vehicle ID
     Optional<ServiceEntry> findByIdAndVehicle_Id(Long id, Long vehicleId);
+    Optional<ServiceEntry> findByIdAndVehicle_Id(long id, long vehicleId);
 
-    // Get the latest service entry for a vehicle using odometer reading
     Optional<ServiceEntry> findTopByVehicle_IdOrderByOdometerReadingDesc(Long vehicleId);
+    Optional<ServiceEntry> findTopByVehicle_IdOrderByOdometerReadingDesc(long vehicleId);
 
-    // Same as above but using Vehicle entity directly
     Optional<ServiceEntry> findTopByVehicleOrderByOdometerReadingDesc(Vehicle vehicle);
 
-    // Get service entries for a vehicle within a date range
+    // ===== Date range =====
+
     List<ServiceEntry> findByVehicle_IdAndServiceDateBetween(
             Long vehicleId,
             LocalDate startDate,
             LocalDate endDate
     );
 
-    // Get service entries done by a garage with minimum odometer reading
+    // REQUIRED by tests (exact name)
+    @Query("""
+        SELECT s FROM ServiceEntry s
+        WHERE s.vehicle.id = :vehicleId
+          AND s.serviceDate BETWEEN :startDate AND :endDate
+    """)
+    List<ServiceEntry> findByVehicleAndDateRange(
+            @Param("vehicleId") long vehicleId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
+
+    // ===== Garage =====
+
     @Query("""
         SELECT s FROM ServiceEntry s
         WHERE s.garage.id = :garageId
