@@ -32,5 +32,3 @@ public class Garage {
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
 }
-
-
