@@ -26,14 +26,28 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
         return serviceEntryRepository.findAll();
     }
 
-    // ✅ REQUIRED BY TESTS
+    // ✅ REQUIRED BY INTERFACE
+    @Override
+    public ServiceEntry getServiceEntryById(Long id) {
+        return serviceEntryRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("ServiceEntry not found"));
+    }
+
+    // ✅ REQUIRED BY INTERFACE
+    @Override
+    public List<ServiceEntry> getServiceEntriesByVehicle(Long vehicleId) {
+        return serviceEntryRepository.findByVehicle_Id(vehicleId);
+    }
+
+    // ✅ REQUIRED BY TESTS (helper, not interface)
     public List<ServiceEntry> getEntriesForVehicle(long vehicleId) {
         return serviceEntryRepository.findByVehicle_Id(vehicleId);
     }
 
-    // ✅ CREATE SERVICE ENTRY
+    // ✅ REQUIRED BY INTERFACE
     @Override
-    public ServiceEntry createServiceEntry(ServiceEntry entry, long vehicleId) {
+    public ServiceEntry createServiceEntry(ServiceEntry entry, Long vehicleId) {
 
         Vehicle vehicle = vehicleRepository
                 .findById(vehicleId)
@@ -53,10 +67,10 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
         return serviceEntryRepository.save(entry);
     }
 
-    // ✅ DATE RANGE
+    // ✅ REQUIRED BY INTERFACE
     @Override
     public List<ServiceEntry> getEntriesByDateRange(
-            long vehicleId,
+            Long vehicleId,
             LocalDate startDate,
             LocalDate endDate
     ) {
@@ -65,9 +79,9 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
         );
     }
 
-    // ✅ LATEST ENTRY
+    // ✅ REQUIRED BY INTERFACE
     @Override
-    public ServiceEntry getLatestServiceEntry(long vehicleId) {
+    public ServiceEntry getLatestServiceEntry(Long vehicleId) {
         return serviceEntryRepository
                 .findTopByVehicle_IdOrderByOdometerReadingDesc(vehicleId)
                 .orElseThrow(() -> new RuntimeException("No service history found"));
