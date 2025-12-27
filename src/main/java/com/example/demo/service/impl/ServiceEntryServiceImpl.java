@@ -42,6 +42,12 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
     }
 
     @Override
+    public ServiceEntry getServiceEntryById(Long id) {
+        return serviceEntryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ServiceEntry not found"));
+    }
+
+    @Override
     public ServiceEntry getLatestServiceEntry(Long vehicleId) {
         return serviceEntryRepository
                 .findTopByVehicle_IdOrderByOdometerReadingDesc(vehicleId)
@@ -49,7 +55,7 @@ public class ServiceEntryServiceImpl implements ServiceEntryService {
     }
 
     @Override
-    public List<ServiceEntry> getEntriesForVehicle(Long vehicleId) {
+    public List<ServiceEntry> getServiceEntriesByVehicle(Long vehicleId) {
         return serviceEntryRepository.findByVehicle_Id(vehicleId);
     }
 

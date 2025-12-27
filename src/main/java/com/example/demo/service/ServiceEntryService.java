@@ -12,9 +12,11 @@ public interface ServiceEntryService {
 
     void deleteServiceEntry(Long id);
 
+    ServiceEntry getServiceEntryById(Long id);
+
     ServiceEntry getLatestServiceEntry(Long vehicleId);
 
-    List<ServiceEntry> getEntriesForVehicle(Long vehicleId);
+    List<ServiceEntry> getServiceEntriesByVehicle(Long vehicleId);
 
     List<ServiceEntry> getAllServiceEntries();
 }
