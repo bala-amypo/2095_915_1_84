@@ -16,6 +16,7 @@ public class Garage {
     private String contactNumber;
     private Boolean active = true;
 
+    // getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
