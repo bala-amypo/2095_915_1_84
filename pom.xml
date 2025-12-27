@@ -96,10 +96,24 @@
             <version>3.1.1</version>
         </dependency>
 
-        <!-- Tests (JUnit 5 default) -->
+        <!-- Spring Boot Test (JUnit 5) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- TestNG (REQUIRED for your tests) -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.9.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -122,11 +136,14 @@
                 </configuration>
             </plugin>
 
-            <!-- Surefire (no TestNG, no suite XML) -->
+            <!-- Surefire configured for TestNG -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.2.5</version>
+                <configuration>
+                    <testNGArtifactName>org.testng:testng</testNGArtifactName>
+                </configuration>
             </plugin>
 
         </plugins>
