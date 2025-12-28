@@ -30,8 +30,9 @@ public class VehicleServiceImpl implements VehicleService {
                 );
     }
 
+    // 🔧 FIXED METHOD NAME (THIS WAS THE BUG)
     @Override
-    public List<Vehicle> getVehiclesByOwnerId(Long ownerId) {
+    public List<Vehicle> getVehiclesByOwner(Long ownerId) {
         return vehicleRepository.findByOwnerId(ownerId);
     }
 
