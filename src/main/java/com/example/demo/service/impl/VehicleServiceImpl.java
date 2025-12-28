@@ -19,6 +19,13 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle createVehicle(Vehicle vehicle) {
+        // prevent duplicate VIN
+        vehicleRepository.findByVin(vehicle.getVin())
+                .ifPresent(v -> {
+                    throw new RuntimeException("Vehicle with this VIN already exists");
+                });
+
+        vehicle.setActive(true); // ensure vehicle is active by default
         return vehicleRepository.save(vehicle);
     }
 
@@ -30,7 +37,14 @@ public class VehicleServiceImpl implements VehicleService {
                 );
     }
 
-    // 🔧 FIXED METHOD NAME (THIS WAS THE BUG)
+    @Override
+    public Vehicle getVehicleByVin(String vin) {
+        return vehicleRepository.findByVin(vin)
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Vehicle not found")
+                );
+    }
+
     @Override
     public List<Vehicle> getVehiclesByOwner(Long ownerId) {
         return vehicleRepository.findByOwnerId(ownerId);
