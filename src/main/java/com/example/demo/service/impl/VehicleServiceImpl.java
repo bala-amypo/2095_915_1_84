@@ -1,9 +1,9 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.EntityNotFoundException;
 import com.example.demo.model.Vehicle;
 import com.example.demo.repository.VehicleRepository;
 import com.example.demo.service.VehicleService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,14 +19,12 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle createVehicle(Vehicle vehicle) {
-        // prevent duplicate VIN
-        vehicleRepository.findByVin(vehicle.getVin())
-                .ifPresent(v -> {
-                    throw new RuntimeException("Vehicle with this VIN already exists");
+        // ✅ If VIN already exists, RETURN existing vehicle (no exception)
+        return vehicleRepository.findByVin(vehicle.getVin())
+                .orElseGet(() -> {
+                    vehicle.setActive(true);
+                    return vehicleRepository.save(vehicle);
                 });
-
-        vehicle.setActive(true); // ensure vehicle is active by default
-        return vehicleRepository.save(vehicle);
     }
 
     @Override
