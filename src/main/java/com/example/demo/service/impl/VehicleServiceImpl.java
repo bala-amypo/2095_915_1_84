@@ -6,7 +6,6 @@ import com.example.demo.repository.VehicleRepository;
 import com.example.demo.service.VehicleService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,35 +19,26 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle createVehicle(Vehicle vehicle) {
-        if (vehicleRepository.findByVin(vehicle.getVin()).isPresent()) {
-            throw new IllegalArgumentException("VIN already exists");
-        }
-        vehicle.setActive(true);
-        vehicle.setCreatedAt(LocalDateTime.now());
         return vehicleRepository.save(vehicle);
     }
 
     @Override
     public Vehicle getVehicleById(Long id) {
         return vehicleRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Vehicle not found"));
+                .orElseThrow(() ->
+                        new EntityNotFoundException("Vehicle not found")
+                );
     }
 
     @Override
-    public Vehicle getVehicleByVin(String vin) {
-        return vehicleRepository.findByVin(vin)
-                .orElseThrow(() -> new EntityNotFoundException("Vehicle not found"));
-    }
-
-    @Override
-    public List<Vehicle> getVehiclesByOwner(Long ownerId) {
+    public List<Vehicle> getVehiclesByOwnerId(Long ownerId) {
         return vehicleRepository.findByOwnerId(ownerId);
     }
 
     @Override
     public void deactivateVehicle(Long id) {
-        Vehicle v = getVehicleById(id);
-        v.setActive(false);
-        vehicleRepository.save(v);
+        Vehicle vehicle = getVehicleById(id);
+        vehicle.setActive(false);
+        vehicleRepository.save(vehicle);
     }
 }
