@@ -22,7 +22,7 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 
-    // CREATE VEHICLE
+    
     @PostMapping
     public ResponseEntity<Vehicle> create(@RequestBody Vehicle vehicle) {
         try {
