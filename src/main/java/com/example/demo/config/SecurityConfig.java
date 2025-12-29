@@ -18,18 +18,13 @@ public class SecurityConfig {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    /**
-     * 🔐 Password encoder bean
-     * REQUIRED for AuthServiceImpl
-     */
+   
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * 🔒 Security filter chain
-     */
+   
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
