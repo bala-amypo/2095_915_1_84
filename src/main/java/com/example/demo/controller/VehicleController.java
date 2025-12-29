@@ -38,7 +38,7 @@ public class VehicleController {
         }
     }
 
-    // GET VEHICLE BY ID
+    
     @GetMapping("/{id}")
     public ResponseEntity<Vehicle> getById(@PathVariable Long id) {
         try {
@@ -51,7 +51,7 @@ public class VehicleController {
         }
     }
 
-    // GET VEHICLE BY VIN
+    
     @GetMapping("/vin/{vin}")
     public ResponseEntity<Vehicle> getByVin(@PathVariable String vin) {
         try {
@@ -64,13 +64,13 @@ public class VehicleController {
         }
     }
 
-    // GET VEHICLES BY OWNER
+    
     @GetMapping("/owner/{ownerId}")
     public ResponseEntity<List<Vehicle>> getByOwner(@PathVariable Long ownerId) {
         return ResponseEntity.ok(vehicleService.getVehiclesByOwner(ownerId));
     }
 
-    // DEACTIVATE VEHICLE
+
     @PutMapping("/{id}/deactivate")
     public ResponseEntity<Void> deactivate(@PathVariable Long id) {
         try {
